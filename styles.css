@@ -258,9 +258,11 @@ textarea {
     background-color: #e9ecef;
 }
 
+/* 모바일 오늘의 요일 표시 스타일 */
 .current-day {
     font-weight: bold;
     font-size: 16px;
+    background-color: #fff9db;
     color: #333;
 }
 
