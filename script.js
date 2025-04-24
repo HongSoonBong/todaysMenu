@@ -82,13 +82,13 @@ function displayMenu(data) {
         
         // 칼로리 정보 추가
         if (weekCalories[index]) {
-            td.innerHTML += `<div class="calorie-info">${weekCalories[index]}</div>`;
+            td.innerHTML += `<br>칼로리: <div class="calorie-info">${weekCalories[index]}</div>`;
         }
         
         // 알레르기 정보 추가
         if (weekAllergies[index]) {
             const allergies = weekAllergies[index].split(',').map(a => a.trim());
-            td.innerHTML += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
+            td.innerHTML += `<div class="allergy-info">알레르기: ${formatAllergies(allergies)}</div>`;
         }
         
         tr.appendChild(td);
@@ -103,13 +103,13 @@ function displayMenu(data) {
         
         // 칼로리 정보 추가
         if (weekCalories[todayDayIndex]) {
-            todayMenuContent += `<div class="calorie-info">${weekCalories[todayDayIndex]}</div>`;
+            todayMenuContent += `<br>칼로리: <div class="calorie-info">${weekCalories[todayDayIndex]}</div>`;
         }
         
         // 알레르기 정보 추가
         if (weekAllergies[todayDayIndex]) {
             const allergies = weekAllergies[todayDayIndex].split(',').map(a => a.trim());
-            todayMenuContent += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
+            todayMenuContent += `<div class="allergy-info">알레르기: ${formatAllergies(allergies)}</div>`;
         }
         
         todayMenu.innerHTML = todayMenuContent;
