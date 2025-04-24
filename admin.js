@@ -2,6 +2,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     setupEventListeners();
     loadCurrentMenu();
+    initializeDatePicker();
 });
 
 // 이벤트 리스너 설정
@@ -31,7 +32,70 @@ function setupEventListeners() {
             window.location.href = 'index.html';
         }
     });
+
+    // 날짜 선택 이벤트
+    document.getElementById('weekStartDate').addEventListener('change', function() {
+        updateWeekRangeDisplay(this.value);
+    });
 }
+
+// 날짜 선택기 초기화
+function initializeDatePicker() {
+    const dateInput = document.getElementById('weekStartDate');
+    const today = new Date();
+    
+    // 오늘 날짜를 YYYY-MM-DD 형식으로 변환
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+    
+    // 날짜 입력 필드에 오늘 날짜 설정
+    dateInput.value = formattedDate;
+    
+    // 주간 범위 표시 업데이트
+    updateWeekRangeDisplay(formattedDate);
+}
+
+// 주간 범위 표시 업데이트
+function updateWeekRangeDisplay(startDate) {
+    const start = new Date(startDate);
+    const end = new Date(start);
+    end.setDate(start.getDate() + 4); // 금요일까지 (5일)
+    
+    const weekRangeDisplay = document.getElementById('weekRangeDisplay');
+    weekRangeDisplay.textContent = `주간 범위: ${formatDate(start)} ~ ${formatDate(end)}`;
+}
+
+// 날짜 포맷팅
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    return `${year}. ${month}. ${day}`;
+}
+
+// 알레르기 유발 식품 매핑
+const allergyFoods = {
+    '난류': ['계란', '달걀', '오믈렛', '에그'],
+    '우유': ['우유', '치즈', '요구르트', '버터', '크림'],
+    '메밀': ['메밀'],
+    '땅콩': ['땅콩'],
+    '대두': ['두부', '된장', '콩', '간장'],
+    '밀': ['밀가루', '빵', '면', '국수'],
+    '고등어': ['고등어', '생선'],
+    '게': ['게'],
+    '새우': ['새우'],
+    '돼지고기': ['돼지', '제육', '삼겹'],
+    '복숭아': ['복숭아'],
+    '토마토': ['토마토'],
+    '아황산류': ['건과일', '건포도'],
+    '호두': ['호두'],
+    '닭고기': ['닭', '치킨'],
+    '쇠고기': ['소고기', '쇠고기', '불고기'],
+    '오징어': ['오징어'],
+    '조개류': ['조개', '홍합', '굴']
+};
 
 // 메뉴 항목 추가
 function addMenuItem(container) {
@@ -40,7 +104,6 @@ function addMenuItem(container) {
     menuItem.innerHTML = `
         <input type="text" placeholder="메뉴명" required>
         <input type="number" placeholder="칼로리" required>
-        <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
         <button type="button" class="btn btn-danger remove-menu-item">삭제</button>
     `;
 
@@ -104,7 +167,6 @@ function fillDayMenu(day, menuItems) {
         menuItem.innerHTML = `
             <input type="text" value="${menu}" required>
             <input type="number" placeholder="칼로리" required>
-            <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
             <button type="button" class="btn btn-danger remove-menu-item">삭제</button>
         `;
 
@@ -125,7 +187,11 @@ function getDayIndex(day) {
 
 // 메뉴 저장
 async function saveMenu() {
-    const weekRange = document.getElementById('weekRange').value;
+    const startDate = new Date(document.getElementById('weekStartDate').value);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 4);
+    
+    const weekRange = `${formatDate(startDate)} ~ ${formatDate(endDate)}`;
     let menuData = `주간 식단 (${weekRange})\n\n`;
     
     const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
@@ -164,16 +230,33 @@ function calculateTotalCalories(menuItems) {
     return total;
 }
 
+// 알레르기 정보 자동 판단
+function detectAllergies(menuName) {
+    const detectedAllergies = new Set();
+    
+    // 메뉴명을 소문자로 변환하여 검사
+    const lowerMenuName = menuName.toLowerCase();
+    
+    // 각 알레르기 유발 식품 검사
+    for (const [allergyType, keywords] of Object.entries(allergyFoods)) {
+        for (const keyword of keywords) {
+            if (lowerMenuName.includes(keyword.toLowerCase())) {
+                detectedAllergies.add(allergyType);
+                break;
+            }
+        }
+    }
+    
+    return Array.from(detectedAllergies);
+}
+
 // 알레르기 정보 수집
 function getAllergies(menuItems) {
     const allergies = new Set();
     menuItems.forEach(item => {
-        const allergyInput = item.querySelector('input[type="text"]:last-child');
-        if (allergyInput.value) {
-            allergyInput.value.split(',').forEach(allergy => {
-                allergies.add(allergy.trim());
-            });
-        }
+        const menuName = item.querySelector('input[type="text"]').value;
+        const detectedAllergies = detectAllergies(menuName);
+        detectedAllergies.forEach(allergy => allergies.add(allergy));
     });
     return Array.from(allergies).join(',');
 }

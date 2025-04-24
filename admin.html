@@ -84,6 +84,21 @@
         .preview-table th {
             background-color: #f8f9fa;
         }
+        .week-range-display {
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            font-size: 0.9em;
+            color: #495057;
+        }
+        input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
     </style>
 </head>
 <body>
@@ -100,8 +115,9 @@
             <h2>주간 식단 등록</h2>
             <form id="menuForm">
                 <div class="form-group">
-                    <label for="weekRange">주간 범위</label>
-                    <input type="text" id="weekRange" placeholder="예: 2024. 4. 22 ~ 4. 26" required>
+                    <label for="weekStartDate">주간 시작일</label>
+                    <input type="date" id="weekStartDate" required>
+                    <div id="weekRangeDisplay" class="week-range-display"></div>
                 </div>
 
                 <div id="weekDays">
@@ -114,7 +130,6 @@
                                 <div class="menu-item">
                                     <input type="text" placeholder="메뉴명" required>
                                     <input type="number" placeholder="칼로리" required>
-                                    <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary add-menu-item">메뉴 추가</button>
@@ -130,7 +145,6 @@
                                 <div class="menu-item">
                                     <input type="text" placeholder="메뉴명" required>
                                     <input type="number" placeholder="칼로리" required>
-                                    <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary add-menu-item">메뉴 추가</button>
@@ -146,7 +160,6 @@
                                 <div class="menu-item">
                                     <input type="text" placeholder="메뉴명" required>
                                     <input type="number" placeholder="칼로리" required>
-                                    <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary add-menu-item">메뉴 추가</button>
@@ -162,7 +175,6 @@
                                 <div class="menu-item">
                                     <input type="text" placeholder="메뉴명" required>
                                     <input type="number" placeholder="칼로리" required>
-                                    <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary add-menu-item">메뉴 추가</button>
@@ -178,7 +190,6 @@
                                 <div class="menu-item">
                                     <input type="text" placeholder="메뉴명" required>
                                     <input type="number" placeholder="칼로리" required>
-                                    <input type="text" placeholder="알레르기 정보 (쉼표로 구분)" required>
                                 </div>
                             </div>
                             <button type="button" class="btn btn-secondary add-menu-item">메뉴 추가</button>
