@@ -99,6 +99,8 @@ th {
 
 /* 모바일 요일 선택 탭 */
 .mobile-day-tabs {
+    background: #fff; /* none; */
+    color: #ccc; /* #666; */
     display: flex;
     justify-content: space-between;
     margin: 15px 0;
@@ -107,12 +109,12 @@ th {
 }
 
 .day-tab {
-    background: none;
+    background: #fff; /* none; */
     border: none;
     padding: 8px 12px;
     font-size: 16px;
     cursor: pointer;
-    color: #666;
+    color: #ccc; /* #666; */
     border-radius: 4px;
     transition: all 0.3s;
 }
