@@ -35,10 +35,12 @@ function displayMenu(data) {
     // 주간 메뉴 파싱 (첫 번째 줄 제외)
     let weekMenus = [];
     let currentDayMenu = [];
+    let isFirstDay = true;
     
-    lines.slice(1).forEach(line => {
-        line = line.trim();
-        if (line === '') return;
+    // 첫 번째 줄(주간 제목)을 제외하고 처리
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line === '') continue;
         
         if (line.includes('요일')) {
             if (currentDayMenu.length > 0) {
@@ -46,10 +48,11 @@ function displayMenu(data) {
                 currentDayMenu = [];
             }
             currentDayMenu.push(line);
+            isFirstDay = false;
         } else if (!line.includes('칼로리') && !line.includes('알레르기')) {
             currentDayMenu.push(line);
         }
-    });
+    }
     
     // 마지막 요일의 메뉴 추가
     if (currentDayMenu.length > 0) {
