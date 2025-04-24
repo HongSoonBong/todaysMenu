@@ -25,37 +25,30 @@ function displayMenu(data) {
     const lines = data.split('\n');
     const menuTable = document.getElementById('menuTableBody');
     const todayMenu = document.getElementById('todayMenuContent');
-    const weekTitle = document.getElementById('weekTitle');
     
-    // 주간 제목 업데이트
-    if (lines.length > 0) {
-        weekTitle.textContent = lines[0];
-    }
-    
-    // 주간 메뉴 파싱 및 표시
-    let currentDay = '';
-    let dayMenu = [];
+    // 주간 메뉴 파싱
     let weekMenus = [];
+    let currentDayMenu = [];
     
-    // 첫 번째 줄(주간 제목)을 제외하고 처리
-    lines.slice(1).forEach(line => {
+    lines.forEach(line => {
+        line = line.trim();
+        if (line === '') return;
+        
         if (line.includes('요일')) {
-            if (dayMenu.length > 0) {
-                weekMenus.push(dayMenu.join('<br>'));
+            if (currentDayMenu.length > 0) {
+                weekMenus.push(currentDayMenu.join('<br>'));
+                currentDayMenu = [];
             }
-            currentDay = line;
-            dayMenu = [currentDay];
-        } else if (line.trim() !== '' && !line.includes('칼로리') && !line.includes('알레르기')) {
-            dayMenu.push(line);
+            currentDayMenu.push(line);
+        } else if (!line.includes('칼로리') && !line.includes('알레르기')) {
+            currentDayMenu.push(line);
         }
     });
     
-    if (dayMenu.length > 0) {
-        weekMenus.push(dayMenu.join('<br>'));
+    // 마지막 요일의 메뉴 추가
+    if (currentDayMenu.length > 0) {
+        weekMenus.push(currentDayMenu.join('<br>'));
     }
-
-    // 테이블 초기화
-    menuTable.innerHTML = '';
 
     // 테이블에 메뉴 표시
     const tr = document.createElement('tr');
@@ -64,6 +57,7 @@ function displayMenu(data) {
         td.innerHTML = menu;
         tr.appendChild(td);
     });
+    menuTable.innerHTML = ''; // 기존 내용 초기화
     menuTable.appendChild(tr);
 
     // 오늘의 메뉴 표시
