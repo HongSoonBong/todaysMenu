@@ -25,12 +25,18 @@ function displayMenu(data) {
     const lines = data.split('\n');
     const menuTable = document.getElementById('menuTableBody');
     const todayMenu = document.getElementById('todayMenuContent');
+    const weekTitle = document.getElementById('weekTitle');
     
-    // 주간 메뉴 파싱
+    // 주간 제목 설정
+    if (lines.length > 0) {
+        weekTitle.textContent = lines[0];
+    }
+    
+    // 주간 메뉴 파싱 (첫 번째 줄 제외)
     let weekMenus = [];
     let currentDayMenu = [];
     
-    lines.forEach(line => {
+    lines.slice(1).forEach(line => {
         line = line.trim();
         if (line === '') return;
         

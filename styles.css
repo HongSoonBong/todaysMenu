@@ -186,3 +186,11 @@ textarea {
         grid-template-columns: 1fr;
     }
 }
+
+.week-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 20px 0 10px 0;
+    color: #333;
+    text-align: center;
+}
