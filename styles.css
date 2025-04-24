@@ -1,0 +1,188 @@
+/* 전역 스타일 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 10px;
+}
+
+/* 헤더 스타일 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.user-info {
+    text-align: right;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-radius: 5px;
+}
+
+#chargeBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 5px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s;
+}
+
+#chargeBtn:hover {
+    background-color: #0056b3;
+}
+
+/* 메뉴 테이블 스타일 */
+.menu-container {
+    margin-bottom: 30px;
+}
+
+#weekTitle {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: center;
+}
+
+th {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+}
+
+/* 모바일에서 보이는 오늘의 메뉴 */
+.today-menu {
+    display: none;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 정보 섹션 스타일 */
+.info-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.info-section > div {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 피드백 섹션 스타일 */
+.feedback-section {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.rating {
+    font-size: 24px;
+    color: #ddd;
+    margin: 10px 0;
+}
+
+.star {
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.star.active {
+    color: #ffd700;
+}
+
+textarea {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+.feedback-section button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.feedback-section button:hover {
+    background-color: #218838;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .user-info {
+        margin-top: 10px;
+    }
+
+    #weeklyMenu {
+        display: none;
+    }
+
+    .today-menu {
+        display: block;
+    }
+
+    .info-section {
+        grid-template-columns: 1fr;
+    }
+}

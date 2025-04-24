@@ -1,1 +1,72 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"/><link rel="icon" href="/favicon.ico"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#000000"/><meta name="description" content="세종특별자치시 구내식당 식단 정보"/><link rel="apple-touch-icon" href="/logo192.png"/><link rel="manifest" href="/manifest.json"/><title>세종특별자치시 구내식당</title><script defer="defer" src="/static/js/main.dadfd4ae.js"></script><link href="/static/css/main.17ff9c9c.css" rel="stylesheet"></head><body><noscript>이 앱을 실행하려면 JavaScript를 활성화해야 합니다.</noscript><div id="root"></div></body></html>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>세종시청 구내식당</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>세종시청 구내식당</h1>
+            <div class="user-info">
+                <span id="userName">홍길동</span>님
+                <span id="userPoints">10,000</span>원
+                <button id="chargeBtn" onclick="chargePoints()">충전</button>
+            </div>
+        </header>
+
+        <div class="menu-container">
+            <h2 id="weekTitle">주간 식단 (2024. 4. 20 ~ 4. 26)</h2>
+            
+            <!-- 모바일에서 보이는 오늘의 메뉴 -->
+            <div class="today-menu">
+                <h3>오늘의 메뉴</h3>
+                <div id="todayMenuContent"></div>
+            </div>
+
+            <!-- PC에서 보이는 주간 메뉴 테이블 -->
+            <table id="weeklyMenu">
+                <thead>
+                    <tr>
+                        <th>월</th>
+                        <th>화</th>
+                        <th>수</th>
+                        <th>목</th>
+                        <th>금</th>
+                    </tr>
+                </thead>
+                <tbody id="menuTableBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="info-section">
+            <div class="serving-time">
+                <h3>배식시간</h3>
+                <p>11:30 ~ 12:30</p>
+            </div>
+            
+            <div class="allergy-info">
+                <h3>알레르기 정보</h3>
+                <p>난류(1), 우유(2), 메밀(3), 땅콩(4), 대두(5), 밀(6), 고등어(7), 게(8), 새우(9), 돼지고기(10), 복숭아(11), 토마토(12), 아황산류(13), 호두(14), 닭고기(15), 쇠고기(16), 오징어(17), 조개류(18)</p>
+            </div>
+        </div>
+
+        <div class="feedback-section">
+            <h3>식단 만족도 평가</h3>
+            <div class="rating">
+                <span class="star" data-rating="1">★</span>
+                <span class="star" data-rating="2">★</span>
+                <span class="star" data-rating="3">★</span>
+                <span class="star" data-rating="4">★</span>
+                <span class="star" data-rating="5">★</span>
+            </div>
+            <textarea id="feedbackText" placeholder="의견을 남겨주세요"></textarea>
+            <button onclick="submitFeedback()">제출</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
