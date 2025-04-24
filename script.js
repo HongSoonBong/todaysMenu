@@ -37,7 +37,11 @@ function displayMenu(data) {
     
     // 주간 메뉴 파싱 (첫 번째 줄 제외)
     let weekMenus = [];
+    let weekCalories = [];
+    let weekAllergies = [];
     let currentDayMenu = [];
+    let currentCalories = '';
+    let currentAllergies = '';
     
     // 첫 번째 줄(주간 제목)을 제외하고 처리
     for (let i = 1; i < lines.length; i++) {
@@ -47,10 +51,18 @@ function displayMenu(data) {
         if (line.includes('요일')) {
             if (currentDayMenu.length > 0) {
                 weekMenus.push(currentDayMenu.join('<br>'));
+                weekCalories.push(currentCalories);
+                weekAllergies.push(currentAllergies);
                 currentDayMenu = [];
+                currentCalories = '';
+                currentAllergies = '';
             }
             // 요일 정보는 제외하고 메뉴만 저장
-        } else if (!line.includes('칼로리') && !line.includes('알레르기')) {
+        } else if (line.includes('칼로리')) {
+            currentCalories = line.replace('칼로리:', '').trim();
+        } else if (line.includes('알레르기')) {
+            currentAllergies = line.replace('알레르기:', '').trim();
+        } else {
             currentDayMenu.push(line);
         }
     }
@@ -58,13 +70,27 @@ function displayMenu(data) {
     // 마지막 요일의 메뉴 추가
     if (currentDayMenu.length > 0) {
         weekMenus.push(currentDayMenu.join('<br>'));
+        weekCalories.push(currentCalories);
+        weekAllergies.push(currentAllergies);
     }
 
     // 테이블에 메뉴 표시
     const tr = document.createElement('tr');
-    weekMenus.forEach(menu => {
+    weekMenus.forEach((menu, index) => {
         const td = document.createElement('td');
         td.innerHTML = menu;
+        
+        // 칼로리 정보 추가
+        if (weekCalories[index]) {
+            td.innerHTML += `<div class="calorie-info">${weekCalories[index]}</div>`;
+        }
+        
+        // 알레르기 정보 추가
+        if (weekAllergies[index]) {
+            const allergies = weekAllergies[index].split(',').map(a => a.trim());
+            td.innerHTML += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
+        }
+        
         tr.appendChild(td);
     });
     menuTable.innerHTML = ''; // 기존 내용 초기화
@@ -73,11 +99,24 @@ function displayMenu(data) {
     // 오늘의 메뉴 표시
     const todayDayIndex = today.getDay() - 1; // 0: 일요일, 1: 월요일, ...
     if (todayDayIndex >= 0 && todayDayIndex < 5) {
-        todayMenu.innerHTML = weekMenus[todayDayIndex];
+        let todayMenuContent = weekMenus[todayDayIndex];
+        
+        // 칼로리 정보 추가
+        if (weekCalories[todayDayIndex]) {
+            todayMenuContent += `<div class="calorie-info">${weekCalories[todayDayIndex]}</div>`;
+        }
+        
+        // 알레르기 정보 추가
+        if (weekAllergies[todayDayIndex]) {
+            const allergies = weekAllergies[todayDayIndex].split(',').map(a => a.trim());
+            todayMenuContent += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
+        }
+        
+        todayMenu.innerHTML = todayMenuContent;
     }
     
     // 모바일 네비게이션 초기화
-    initMobileNavigation(weekMenus);
+    initMobileNavigation(weekMenus, weekCalories, weekAllergies);
 }
 
 // 별점 시스템 설정
@@ -205,7 +244,7 @@ function getWeekMenus() {
 }
 
 // 모바일 네비게이션 초기화
-function initMobileNavigation(weekMenus) {
+function initMobileNavigation(weekMenus, weekCalories, weekAllergies) {
     const prevBtn = document.getElementById('prevDayBtn');
     const nextBtn = document.getElementById('nextDayBtn');
     const currentDayEl = document.querySelector('.current-day');
@@ -240,7 +279,49 @@ function initMobileNavigation(weekMenus) {
         const todayMenu = document.getElementById('todayMenuContent');
         
         if (index >= 0 && index < weekMenus.length) {
-            todayMenu.innerHTML = weekMenus[index];
+            let menuContent = weekMenus[index];
+            
+            // 칼로리 정보 추가
+            if (weekCalories[index]) {
+                menuContent += `<div class="calorie-info">${weekCalories[index]}</div>`;
+            }
+            
+            // 알레르기 정보 추가
+            if (weekAllergies[index]) {
+                const allergies = weekAllergies[index].split(',').map(a => a.trim());
+                menuContent += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
+            }
+            
+            todayMenu.innerHTML = menuContent;
         }
     }
+}
+
+// 알레르기 정보 포맷팅
+function formatAllergies(allergies) {
+    const allergyMap = {
+        '1': '난류',
+        '2': '우유',
+        '3': '메밀',
+        '4': '땅콩',
+        '5': '대두',
+        '6': '밀',
+        '7': '고등어',
+        '8': '게',
+        '9': '새우',
+        '10': '돼지고기',
+        '11': '복숭아',
+        '12': '토마토',
+        '13': '아황산류',
+        '14': '호두',
+        '15': '닭고기',
+        '16': '쇠고기',
+        '17': '오징어',
+        '18': '조개류'
+    };
+    
+    return allergies.map(code => {
+        const name = allergyMap[code] || code;
+        return `<span class="allergy-tag" data-code="${code}">${name}</span>`;
+    }).join('');
 }

@@ -261,3 +261,53 @@ textarea {
     font-size: 16px;
     color: #333;
 }
+
+/* 칼로리 정보 스타일 */
+.calorie-info {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #e74c3c;
+    font-weight: bold;
+    padding: 5px;
+    background-color: #fef2f2;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* 알레르기 정보 스타일 */
+.allergy-info {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.allergy-tag {
+    font-size: 0.8em;
+    padding: 3px 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    color: #555;
+    display: inline-block;
+}
+
+/* 알레르기 코드별 색상 */
+.allergy-tag[data-code="1"] { background-color: #ffeaa7; }
+.allergy-tag[data-code="2"] { background-color: #a8e6cf; }
+.allergy-tag[data-code="3"] { background-color: #dcedc1; }
+.allergy-tag[data-code="4"] { background-color: #ffd3b6; }
+.allergy-tag[data-code="5"] { background-color: #d4a5a5; }
+.allergy-tag[data-code="6"] { background-color: #b5ead7; }
+.allergy-tag[data-code="7"] { background-color: #c7ceea; }
+.allergy-tag[data-code="8"] { background-color: #e2f0cb; }
+.allergy-tag[data-code="9"] { background-color: #ffaaa5; }
+.allergy-tag[data-code="10"] { background-color: #ffd3b6; }
+.allergy-tag[data-code="11"] { background-color: #ffaaa5; }
+.allergy-tag[data-code="12"] { background-color: #ff8b94; }
+.allergy-tag[data-code="13"] { background-color: #dcedc1; }
+.allergy-tag[data-code="14"] { background-color: #ffeaa7; }
+.allergy-tag[data-code="15"] { background-color: #ffd3b6; }
+.allergy-tag[data-code="16"] { background-color: #ffaaa5; }
+.allergy-tag[data-code="17"] { background-color: #c7ceea; }
+.allergy-tag[data-code="18"] { background-color: #e2f0cb; }
