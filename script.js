@@ -283,7 +283,7 @@ function initMobileNavigation(weekMenus, weekCalories, weekAllergies) {
             
             // 칼로리 정보 추가
             if (weekCalories[index]) {
-                menuContent += `<div class="calorie-info">${weekCalories[index]}</div>`;
+                menuContent += `<br><div class="calorie-info">칼로리: ${weekCalories[index]}</div>`;
             }
             
             // 알레르기 정보 추가
