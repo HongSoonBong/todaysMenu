@@ -185,6 +185,11 @@ textarea {
     .info-section {
         grid-template-columns: 1fr;
     }
+    
+    .week-title {
+        margin-bottom: 15px;
+        font-size: 1.1em;
+    }
 }
 
 .week-title {
