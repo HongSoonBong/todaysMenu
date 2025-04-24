@@ -45,7 +45,7 @@ function displayMenu(data) {
             }
             currentDay = line;
             dayMenu = [currentDay];
-        } else if (line.trim() !== '') {
+        } else if (line.trim() !== '' && !line.includes('칼로리') && !line.includes('알레르기')) {
             dayMenu.push(line);
         }
     });
@@ -53,6 +53,9 @@ function displayMenu(data) {
     if (dayMenu.length > 0) {
         weekMenus.push(dayMenu.join('<br>'));
     }
+
+    // 테이블 초기화
+    menuTable.innerHTML = '';
 
     // 테이블에 메뉴 표시
     const tr = document.createElement('tr');
