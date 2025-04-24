@@ -73,7 +73,7 @@ table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
-    background-color: white;
+    background-color: yellow; /* white; */
 }
 
 th, td {
@@ -90,7 +90,7 @@ th {
 /* 모바일에서 보이는 오늘의 메뉴 */
 .today-menu {
     display: none;
-    background-color: #fff;
+    background-color: #ffe9d6; /* #fff; */
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
