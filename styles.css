@@ -90,7 +90,7 @@ th {
 /* 모바일에서 보이는 오늘의 메뉴 */
 .today-menu {
     display: none;
-    background-color: #007bff; /* #fff; */
+    background-color: #fff;
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
@@ -99,7 +99,7 @@ th {
 
 /* 모바일 요일 선택 탭 */
 .mobile-day-tabs {
-    background: #ffe9d6; /* none; */
+    background: #007bff; /* none; */
     color: #ccc; /* #666; */
     display: flex;
     justify-content: space-between;
