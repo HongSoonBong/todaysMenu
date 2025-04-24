@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadMenuData();
     setupStarRating();
     updateTodayHighlight();
+    setupMobileDayTabs();
 });
 
 // 메뉴 데이터 로드
@@ -143,4 +144,43 @@ function submitFeedback() {
 function chargePoints() {
     // 실제 구현에서는 결제 시스템으로 연결
     alert('결제 시스템으로 연결됩니다.');
+}
+
+// 모바일 요일 선택 탭 설정
+function setupMobileDayTabs() {
+    const dayTabs = document.querySelectorAll('.day-tab');
+    dayTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // 활성 탭 변경
+            dayTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // 선택된 요일의 메뉴 표시
+            const dayIndex = parseInt(this.dataset.day) - 1; // 0: 월요일, 1: 화요일, ...
+            displayMobileMenu(dayIndex);
+        });
+    });
+}
+
+// 모바일에서 선택된 요일의 메뉴 표시
+function displayMobileMenu(dayIndex) {
+    const todayMenu = document.getElementById('todayMenuContent');
+    const weekMenus = getWeekMenus();
+    
+    if (dayIndex >= 0 && dayIndex < weekMenus.length) {
+        todayMenu.innerHTML = weekMenus[dayIndex];
+    }
+}
+
+// 주간 메뉴 데이터 가져오기
+function getWeekMenus() {
+    const menuTable = document.getElementById('menuTableBody');
+    const cells = menuTable.querySelectorAll('td');
+    const weekMenus = [];
+    
+    cells.forEach(cell => {
+        weekMenus.push(cell.innerHTML);
+    });
+    
+    return weekMenus;
 }
