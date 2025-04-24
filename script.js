@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     loadMenuData();
     setupStarRating();
     updateTodayHighlight();
-    setupMobileDayTabs();
+    setupMobileNavigation();
 });
 
 // 메뉴 데이터 로드
@@ -146,29 +146,45 @@ function chargePoints() {
     alert('결제 시스템으로 연결됩니다.');
 }
 
-// 모바일 요일 선택 탭 설정
-function setupMobileDayTabs() {
-    const dayTabs = document.querySelectorAll('.day-tab');
-    dayTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            // 활성 탭 변경
-            dayTabs.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            
-            // 선택된 요일의 메뉴 표시
-            const dayIndex = parseInt(this.dataset.day) - 1; // 0: 월요일, 1: 화요일, ...
-            displayMobileMenu(dayIndex);
-        });
-    });
-}
-
-// 모바일에서 선택된 요일의 메뉴 표시
-function displayMobileMenu(dayIndex) {
-    const todayMenu = document.getElementById('todayMenuContent');
-    const weekMenus = getWeekMenus();
+// 모바일 네비게이션 설정
+function setupMobileNavigation() {
+    const prevBtn = document.getElementById('prevDayBtn');
+    const nextBtn = document.getElementById('nextDayBtn');
+    const currentDayEl = document.querySelector('.current-day');
     
-    if (dayIndex >= 0 && dayIndex < weekMenus.length) {
-        todayMenu.innerHTML = weekMenus[dayIndex];
+    // 현재 선택된 요일 인덱스 (기본값: 오늘)
+    let currentDayIndex = today.getDay() - 1; // 0: 월요일, 1: 화요일, ...
+    if (currentDayIndex < 0 || currentDayIndex > 4) {
+        currentDayIndex = 0; // 주말이면 월요일로 설정
+    }
+    
+    // 초기 요일 표시
+    updateCurrentDay(currentDayIndex);
+    
+    // 이전 요일 버튼 클릭 이벤트
+    prevBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex - 1 + 5) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 다음 요일 버튼 클릭 이벤트
+    nextBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex + 1) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 현재 요일 업데이트
+    function updateCurrentDay(index) {
+        const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
+        currentDayEl.textContent = days[index];
+        
+        // 메뉴 표시
+        const todayMenu = document.getElementById('todayMenuContent');
+        const weekMenus = getWeekMenus();
+        
+        if (index >= 0 && index < weekMenus.length) {
+            todayMenu.innerHTML = weekMenus[index];
+        }
     }
 }
 

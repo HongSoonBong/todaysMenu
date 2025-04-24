@@ -228,3 +228,37 @@ textarea {
     color: #333;
     text-align: center;
 }
+
+/* 모바일 메뉴 네비게이션 */
+.mobile-menu-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.nav-btn {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.nav-btn:hover {
+    background-color: #e9ecef;
+}
+
+.current-day {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
