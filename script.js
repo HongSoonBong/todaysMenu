@@ -25,13 +25,20 @@ function displayMenu(data) {
     const lines = data.split('\n');
     const menuTable = document.getElementById('menuTableBody');
     const todayMenu = document.getElementById('todayMenuContent');
+    const weekTitle = document.getElementById('weekTitle');
+    
+    // 주간 제목 업데이트
+    if (lines.length > 0) {
+        weekTitle.textContent = lines[0];
+    }
     
     // 주간 메뉴 파싱 및 표시
     let currentDay = '';
     let dayMenu = [];
     let weekMenus = [];
     
-    lines.forEach(line => {
+    // 첫 번째 줄(주간 제목)을 제외하고 처리
+    lines.slice(1).forEach(line => {
         if (line.includes('요일')) {
             if (dayMenu.length > 0) {
                 weekMenus.push(dayMenu.join('<br>'));
