@@ -26,12 +26,12 @@ function displayMenu(data) {
     const lines = data.split('\n');
     const menuTable = document.getElementById('menuTableBody');
     const todayMenu = document.getElementById('todayMenuContent');
-    const weekTitle = document.getElementById('weekTitle');
+    const weekTitleMobile = document.getElementById('weekTitleMobile');
     const weekTitlePC = document.getElementById('weekTitlePC');
     
     // 주간 제목 설정
     if (lines.length > 0) {
-        weekTitle.textContent = lines[0];
+        weekTitleMobile.textContent = lines[0];
         weekTitlePC.textContent = lines[0];
     }
     
@@ -75,6 +75,9 @@ function displayMenu(data) {
     if (todayDayIndex >= 0 && todayDayIndex < 5) {
         todayMenu.innerHTML = weekMenus[todayDayIndex];
     }
+    
+    // 모바일 네비게이션 초기화
+    initMobileNavigation(weekMenus);
 }
 
 // 별점 시스템 설정
@@ -199,4 +202,45 @@ function getWeekMenus() {
     });
     
     return weekMenus;
+}
+
+// 모바일 네비게이션 초기화
+function initMobileNavigation(weekMenus) {
+    const prevBtn = document.getElementById('prevDayBtn');
+    const nextBtn = document.getElementById('nextDayBtn');
+    const currentDayEl = document.querySelector('.current-day');
+    
+    // 현재 선택된 요일 인덱스 (기본값: 오늘)
+    let currentDayIndex = today.getDay() - 1; // 0: 월요일, 1: 화요일, ...
+    if (currentDayIndex < 0 || currentDayIndex > 4) {
+        currentDayIndex = 0; // 주말이면 월요일로 설정
+    }
+    
+    // 초기 요일 표시
+    updateCurrentDay(currentDayIndex);
+    
+    // 이전 요일 버튼 클릭 이벤트
+    prevBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex - 1 + 5) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 다음 요일 버튼 클릭 이벤트
+    nextBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex + 1) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 현재 요일 업데이트
+    function updateCurrentDay(index) {
+        const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
+        currentDayEl.textContent = days[index];
+        
+        // 메뉴 표시
+        const todayMenu = document.getElementById('todayMenuContent');
+        
+        if (index >= 0 && index < weekMenus.length) {
+            todayMenu.innerHTML = weekMenus[index];
+        }
+    }
 }

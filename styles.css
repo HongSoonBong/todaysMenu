@@ -215,9 +215,8 @@ textarea {
         grid-template-columns: 1fr;
     }
     
-    .week-title {
-        margin-bottom: 15px;
-        font-size: 1.1em;
+    #weekTitlePC {
+        display: none; /* PC용 주간 제목 숨김 */
     }
 }
 
