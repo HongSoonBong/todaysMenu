@@ -58,9 +58,9 @@ function displayMenu(data) {
                 currentAllergies = '';
             }
             // 요일 정보는 제외하고 메뉴만 저장
-        } else if (line.includes('칼로리')) {
+        } else if (line.includes('칼로리:')) {
             currentCalories = line.replace('칼로리:', '').trim();
-        } else if (line.includes('알레르기')) {
+        } else if (line.includes('알레르기:')) {
             currentAllergies = line.replace('알레르기:', '').trim();
         } else {
             currentDayMenu.push(line);
