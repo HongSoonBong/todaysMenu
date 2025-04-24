@@ -35,7 +35,6 @@ function displayMenu(data) {
     // 주간 메뉴 파싱 (첫 번째 줄 제외)
     let weekMenus = [];
     let currentDayMenu = [];
-    let isFirstDay = true;
     
     // 첫 번째 줄(주간 제목)을 제외하고 처리
     for (let i = 1; i < lines.length; i++) {
@@ -47,8 +46,7 @@ function displayMenu(data) {
                 weekMenus.push(currentDayMenu.join('<br>'));
                 currentDayMenu = [];
             }
-            currentDayMenu.push(line);
-            isFirstDay = false;
+            // 요일 정보는 제외하고 메뉴만 저장
         } else if (!line.includes('칼로리') && !line.includes('알레르기')) {
             currentDayMenu.push(line);
         }
