@@ -16,12 +16,16 @@
             </div>
             <div class="header-center">
                 <div class="header-content">
-                    <h1>구내식당</h1>
+                    <h1>
+                        <div id="weekTitleMobile" class="week-title"></div>
+                        <div id="weekTitlePC" class="week-title"></div>
+                    </h1>
                 </div>
             </div>
-            <div class="header-right">
+  /*          <div class="header-right">
                 <img src="ci.jpg" alt="세종시청 CI" class="ci-image">
-            </div>
+              </div>
+  */
             <div class="user-info">
                 <span id="userName">홍순봉</span>님 잔액:
                 <span id="userPoints">10,000</span>원
@@ -33,17 +37,15 @@
                        
             <!-- 모바일에서 보이는 오늘의 메뉴 -->
             <div class="today-menu">
-                <div id="weekTitleMobile" class="week-title"></div>
                 <div class="mobile-menu-nav">
                     <button id="prevDayBtn" class="nav-btn">&lt;</button>
-                    <div class="current-day">오늘의 메뉴</div>
+                    <div class="current-day">오늘의 요일</div>
                     <button id="nextDayBtn" class="nav-btn">&gt;</button>
                 </div>
                 <div id="todayMenuContent"></div>
             </div>
 
             <!-- PC에서 보이는 주간 메뉴 테이블 -->
-            <div id="weekTitlePC" class="week-title"></div>
             <table id="weeklyMenu">
                 <thead>
                     <tr>
