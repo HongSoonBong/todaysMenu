@@ -273,10 +273,6 @@ textarea {
     .info-section {
         grid-template-columns: 1fr;
     }
-    
-    #weekTitlePC {
-        display: none; /* PC용 주간 제목 숨김 */
-    }
 }
 
 .week-title {
