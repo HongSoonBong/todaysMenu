@@ -26,13 +26,11 @@ function displayMenu(data) {
     const lines = data.split('\n');
     const menuTable = document.getElementById('menuTableBody');
     const todayMenu = document.getElementById('todayMenuContent');
-    const weekTitleMobile = document.getElementById('weekTitleMobile');
-    const weekTitlePC = document.getElementById('weekTitlePC');
+    const weekTitle = document.getElementById('weekTitle');
     
     // 주간 제목 설정
     if (lines.length > 0) {
-        weekTitleMobile.textContent = lines[0];
-        weekTitlePC.textContent = lines[0];
+        weekTitle.textContent = lines[0];
     }
     
     // 주간 메뉴 파싱 (첫 번째 줄 제외)
