@@ -3,6 +3,11 @@ const today = new Date();
 let currentRating = 0;
 let feedbacks = [];
 
+// GitHub API 설정
+const GITHUB_TOKEN = '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'; // GitHub Personal Access Token
+const GITHUB_REPO = 'hongsoonbong/todaysMenu'; // GitHub 저장소 (사용자명/저장소명)
+const FEEDBACK_FILE = 'comment.txt'; // 피드백 파일 이름
+
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
     loadMenuData();
@@ -324,41 +329,119 @@ async function saveFeedbackToFile(newFeedback) {
         const feedbacks = await loadFeedbacksFromFile();
         feedbacks.push(newFeedback);
         
-        // 파일에 저장
-        const response = await fetch('comment.txt', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(feedbacks, null, 2)
-        });
+        // GitHub API를 사용하여 파일 업데이트
+        await updateGitHubFile(FEEDBACK_FILE, JSON.stringify(feedbacks, null, 2));
         
-        if (!response.ok) {
-            throw new Error('피드백 저장에 실패했습니다.');
-        }
+        // 피드백 목록에 추가
+        feedbacks.push(newFeedback);
+        updateFeedbackDisplay();
+        
+        // 입력 필드 초기화
+        currentRating = 0;
+        updateStars(0);
+        document.getElementById('feedbackText').value = '';
+        
+        alert('피드백이 저장되었습니다.');
     } catch (error) {
         console.error('Error saving feedback:', error);
-        throw error;
+        alert('피드백 저장 중 오류가 발생했습니다.');
     }
 }
 
 // 파일에서 피드백 불러오기
 async function loadFeedbacksFromFile() {
-    try {
-        const response = await fetch('comment.txt');
-        if (!response.ok) {
-            // 파일이 없거나 읽을 수 없는 경우 빈 배열 반환
+   try {
+        // GitHub API를 사용하여 파일 내용 가져오기
+        const content = await getGitHubFileContent(FEEDBACK_FILE);
+        
+        if (!content) {
             return [];
         }
-        const contents = await response.text();
+        
         // 비어 있는 파일 처리
-        if (!contents.trim()) {
+        if (!content.trim()) {
             return [];
         }
-        return JSON.parse(contents);
+        
+        return JSON.parse(content);
     } catch (error) {
-        console.error('Error loading feedbacks from file:', error);
+        console.error('Error loading feedbacks:', error);
         return [];
+    }
+}
+
+// GitHub 파일 내용 가져오기
+async function getGitHubFileContent(filePath) {
+    try {
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Accept': 'application/vnd.github.v3+json'
+            }
+        });
+        
+        if (response.status === 404) {
+            // 파일이 없는 경우
+            return '';
+        }
+        
+        if (!response.ok) {
+            throw new Error(`GitHub API 오류: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        // Base64로 인코딩된 내용을 디코딩
+        return atob(data.content);
+    } catch (error) {
+        console.error('Error fetching GitHub file:', error);
+        throw error;
+    }
+}
+
+// GitHub 파일 업데이트
+async function updateGitHubFile(filePath, content) {
+    try {
+        // 먼저 현재 파일 정보 가져오기
+        let sha;
+        try {
+            const fileInfo = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
+                headers: {
+                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            
+            if (fileInfo.ok) {
+                const data = await fileInfo.json();
+                sha = data.sha;
+            }
+        } catch (error) {
+            // 파일이 없는 경우 무시
+        }
+        
+        // 파일 업데이트 또는 생성
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/vnd.github.v3+json'
+            },
+            body: JSON.stringify({
+                message: 'Update feedback data',
+                content: btoa(content), // Base64로 인코딩
+                sha: sha // 파일이 이미 존재하는 경우에만 필요
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`GitHub API 오류: ${response.status}`);
+        }
+        
+        return await response.json();
+    } catch (error) {
+        console.error('Error updating GitHub file:', error);
+        throw error;
     }
 }
 
