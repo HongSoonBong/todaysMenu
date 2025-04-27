@@ -16,9 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadMenuData() {
     try {
         const response = await fetch('data.txt');
-        if (!response.ok) {
-            throw new Error('메뉴 데이터를 불러올 수 없습니다.');
-        }
         const data = await response.text();
         displayMenu(data);
     } catch (error) {
