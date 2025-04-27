@@ -81,6 +81,18 @@
             <textarea id="feedbackText" placeholder="의견을 남겨주세요"></textarea>
             <button onclick="submitFeedback()">제출</button>
         </div>
+         <div class="feedback-summary">
+            <h3>평가 현황</h3>
+            <div class="average-rating">
+                <span>평균 평점: </span>
+                <span id="averageRating">0</span>
+                <span>점</span>
+            </div>
+            <div class="feedback-list">
+                <h4>의견 목록</h4>
+                <div id="feedbackList"></div>
+            </div>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
