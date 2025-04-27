@@ -228,6 +228,61 @@ textarea {
     background-color: #218838;
 }
 
+/* 피드백 요약 섹션 스타일 */
+.feedback-summary {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.average-rating {
+    font-size: 1.2em;
+    color: #2c3e50;
+    margin: 15px 0;
+    text-align: center;
+}
+
+#averageRating {
+    font-weight: bold;
+    color: #e74c3c;
+    font-size: 1.4em;
+}
+
+.feedback-list {
+    margin-top: 20px;
+}
+
+.feedback-list h4 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.feedback-item {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    border-left: 4px solid #007bff;
+}
+
+.feedback-rating {
+    color: #ffd700;
+    margin-bottom: 5px;
+}
+
+.feedback-text {
+    color: #555;
+    font-size: 0.95em;
+}
+
+.feedback-date {
+    color: #888;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .container {
