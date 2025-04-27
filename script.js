@@ -382,7 +382,7 @@ async function getGitHubFileContent(filePath) {
     try {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
             headers: {
-                'Authorization': `token ${getDecryptedToken()}`,
+                'Authorization': `Bearer ${getDecryptedToken()}`,
                 'Accept': 'application/vnd.github.v3+json'
             }
         });
@@ -413,7 +413,7 @@ async function updateGitHubFile(filePath, content) {
         try {
             const fileInfo = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
                 headers: {
-                    'Authorization': `token ${getDecryptedToken()}`,
+                    'Authorization': `Bearer ${getDecryptedToken()}`,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
@@ -430,7 +430,7 @@ async function updateGitHubFile(filePath, content) {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `token ${getDecryptedToken()}`,
+                'Authorization': `Bearer ${getDecryptedToken()}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/vnd.github.v3+json'
             },
