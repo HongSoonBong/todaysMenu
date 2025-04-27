@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupStarRating();
     updateTodayHighlight();
     setupMobileNavigation();
-    //loadFeedbacks();   
+    loadFeedbacks();   
 });
 
 // 메뉴 데이터 로드
