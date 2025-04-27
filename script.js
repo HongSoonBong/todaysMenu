@@ -4,18 +4,12 @@ let currentRating = 0;
 let feedbacks = [];
 
 // 페이지 로드 시 실행
-document.addEventListener('DOMContentLoaded', async function() {
-    await loadMenuData();
+document.addEventListener('DOMContentLoaded', function() {
+    loadMenuData();
     setupStarRating();
     updateTodayHighlight();
     setupMobileNavigation();
-    loadFeedbacks();
-    
-    // 충전 버튼 이벤트 리스너 추가
-    const chargeBtn = document.getElementById('chargeBtn');
-    if (chargeBtn) {
-        chargeBtn.addEventListener('click', chargePoints);
-    }
+    loadFeedbacks();   
 });
 
 // 메뉴 데이터 로드
