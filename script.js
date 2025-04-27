@@ -1,6 +1,7 @@
 // 현재 날짜 가져오기
 const today = new Date();
 let currentRating = 0;
+let feedbacks = [];
 
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', function() {
@@ -8,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setupStarRating();
     updateTodayHighlight();
     setupMobileNavigation();
+    loadFeedbacks();
 });
 
 // 메뉴 데이터 로드
@@ -130,8 +132,8 @@ function setupStarRating() {
         });
 
         star.addEventListener('click', function() {
-            currentRating = this.dataset.rating;
-            updateStars(currentRating, 'active');
+            currentRating = parseInt(this.dataset.rating);
+            updateStars(currentRating);
         });
     });
 }
@@ -158,26 +160,118 @@ function updateTodayHighlight() {
 
 // 피드백 제출
 function submitFeedback() {
-    const feedbackText = document.getElementById('feedbackText').value;
+    const feedbackText = document.getElementById('feedbackText').value.trim();
+    
     if (currentRating === 0) {
-        alert('별점을 선택해주세요.');
+        alert('평점을 선택해주세요.');
         return;
     }
-    
-    // 피드백 저장 로직
+
     const feedback = {
         rating: currentRating,
-        comment: feedbackText,
+        text: feedbackText,
         date: new Date().toISOString()
     };
+
+    try {
+        // 피드백을 파일에 저장
+        await saveFeedbackToFile(feedback);
+        
+        // 피드백 목록에 추가
+        feedbacks.push(feedback);
+        updateFeedbackDisplay();
+        
+        // 입력 필드 초기화
+        currentRating = 0;
+        updateStars(0);
+        document.getElementById('feedbackText').value = '';
+        
+        alert('피드백이 저장되었습니다.');
+    } catch (error) {
+        console.error('Error:', error);
+        alert('피드백 저장 중 오류가 발생했습니다.');
+    }
+}
+
+// 파일에 피드백 저장
+async function saveFeedbackToFile(newFeedback) {
+    try {
+        // 기존 피드백 불러오기
+        const feedbacks = await loadFeedbacksFromFile();
+        feedbacks.push(newFeedback);
+        
+        // 파일에 저장
+        const blob = new Blob([JSON.stringify(feedbacks, null, 2)], { type: 'application/json' });
+        const handle = await window.showSaveFilePicker({
+            suggestedName: 'comment.txt',
+            types: [{
+                description: 'Text Files',
+                accept: { 'text/plain': ['.txt'] },
+            }],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+    } catch (error) {
+        console.error('Error saving feedback:', error);
+        throw error;
+    }
+}
+
+// 파일에서 피드백 불러오기
+async function loadFeedbacksFromFile() {
+    try {
+        const [fileHandle] = await window.showOpenFilePicker({
+            types: [{
+                description: 'Text Files',
+                accept: { 'text/plain': ['.txt'] },
+            }],
+        });
+        const file = await fileHandle.getFile();
+        const contents = await file.text();
+        return JSON.parse(contents);
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            // 사용자가 파일 선택을 취소한 경우
+            return [];
+        }
+        throw error;
+    }
+}
+
+// 피드백 표시 업데이트
+function updateFeedbackDisplay() {
+    // 평균 평점 계산
+    const average = feedbacks.length > 0
+        ? (feedbacks.reduce((sum, f) => sum + f.rating, 0) / feedbacks.length).toFixed(1)
+        : 0;
     
-    console.log('피드백 제출:', feedback);
-    alert('소중한 의견 감사합니다!');
-    
-    // 입력 필드 초기화
-    document.getElementById('feedbackText').value = '';
-    currentRating = 0;
-    updateStars(0, 'active');
+    document.getElementById('averageRating').textContent = average;
+
+    // 피드백 목록 표시
+    const feedbackList = document.getElementById('feedbackList');
+    feedbackList.innerHTML = feedbacks.map(feedback => `
+        <div class="feedback-item">
+            <div class="feedback-rating">
+                ${'★'.repeat(feedback.rating)}${'☆'.repeat(5-feedback.rating)}
+            </div>
+            <div class="feedback-text">${feedback.text}</div>
+            <div class="feedback-date">
+                ${new Date(feedback.date).toLocaleDateString()}
+            </div>
+        </div>
+    `).join('');
+}
+
+// 페이지 로드 시 저장된 피드백 불러오기
+async function loadFeedbacks() {
+    try {
+        const loadedFeedbacks = await loadFeedbacksFromFile();
+        feedbacks = loadedFeedbacks;
+        updateFeedbackDisplay();
+    } catch (error) {
+        console.error('Error loading feedbacks:', error);
+    }
 }
 
 // 포인트 충전
