@@ -351,6 +351,10 @@ async function loadFeedbacksFromFile() {
             return [];
         }
         const contents = await response.text();
+        // 비어 있는 파일 처리
+        if (!contents.trim()) {
+            return [];
+        }
         return JSON.parse(contents);
     } catch (error) {
         console.error('Error loading feedbacks from file:', error);
