@@ -24,10 +24,10 @@ async function loadMenuData() {
         const todayMenu = document.getElementById('todayMenuContent');
         
         if (menuTable) {
-            menuTable.innerHTML = '<tr><td colspan="5">메뉴를 불러올 수 없습니다1.</td></tr>';
+            menuTable.innerHTML = '<tr><td colspan="5">메뉴를 불러올 수 없습니다3.</td></tr>';
         }
         if (todayMenu) {
-            todayMenu.innerHTML = '메뉴를 불러올 수 없습니다2.';
+            todayMenu.innerHTML = '메뉴를 불러올 수 없습니다4.';
         }
     }
 }
