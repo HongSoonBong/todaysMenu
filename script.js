@@ -41,6 +41,12 @@ async function loadMenuData() {
     }
 }
 
+// 포인트 충전
+function chargePoints() {
+    // 실제 구현에서는 결제 시스템으로 연결
+    alert('결제 시스템으로 연결됩니다.');
+}
+
 // 메뉴 표시
 function displayMenu(data) {
     const lines = data.split('\n');
@@ -139,6 +145,124 @@ function displayMenu(data) {
     initMobileNavigation(weekMenus, weekCalories, weekAllergies);
 }
 
+// 모바일 네비게이션 설정
+function setupMobileNavigation() {
+    const prevBtn = document.getElementById('prevDayBtn');
+    const nextBtn = document.getElementById('nextDayBtn');
+    const currentDayEl = document.querySelector('.current-day');
+    
+    // 현재 선택된 요일 인덱스 (기본값: 오늘)
+    let currentDayIndex = today.getDay() - 1; // 0: 월요일, 1: 화요일, ...
+    if (currentDayIndex < 0 || currentDayIndex > 4) {
+        currentDayIndex = 0; // 주말이면 월요일로 설정
+    }
+    
+    // 초기 요일 표시
+    updateCurrentDay(currentDayIndex);
+    
+    // 이전 요일 버튼 클릭 이벤트
+    prevBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex - 1 + 5) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 다음 요일 버튼 클릭 이벤트
+    nextBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex + 1) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 현재 요일 업데이트
+    function updateCurrentDay(index) {
+        const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
+        currentDayEl.textContent = days[index];
+        
+        // 메뉴 표시
+        const todayMenu = document.getElementById('todayMenuContent');
+        const weekMenus = getWeekMenus();
+        
+        if (index >= 0 && index < weekMenus.length) {
+            todayMenu.innerHTML = weekMenus[index];
+        }
+    }
+}
+
+// 주간 메뉴 데이터 가져오기
+function getWeekMenus() {
+    const menuTable = document.getElementById('menuTableBody');
+    const cells = menuTable.querySelectorAll('td');
+    const weekMenus = [];
+    
+    cells.forEach(cell => {
+        weekMenus.push(cell.innerHTML);
+    });
+    
+    return weekMenus;
+}
+
+// 모바일 네비게이션 초기화
+function initMobileNavigation(weekMenus, weekCalories, weekAllergies) {
+    const prevBtn = document.getElementById('prevDayBtn');
+    const nextBtn = document.getElementById('nextDayBtn');
+    const currentDayEl = document.querySelector('.current-day');
+    
+    // 현재 선택된 요일 인덱스 (기본값: 오늘)
+    let currentDayIndex = today.getDay() - 1; // 0: 월요일, 1: 화요일, ...
+    if (currentDayIndex < 0 || currentDayIndex > 4) {
+        currentDayIndex = 0; // 주말이면 월요일로 설정
+    }
+    
+    // 초기 요일 표시
+    updateCurrentDay(currentDayIndex);
+    
+    // 이전 요일 버튼 클릭 이벤트
+    prevBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex - 1 + 5) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 다음 요일 버튼 클릭 이벤트
+    nextBtn.addEventListener('click', function() {
+        currentDayIndex = (currentDayIndex + 1) % 5; // 0~4 범위 유지
+        updateCurrentDay(currentDayIndex);
+    });
+    
+    // 현재 요일 업데이트
+    function updateCurrentDay(index) {
+        const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
+        currentDayEl.textContent = days[index];
+        
+        // 메뉴 표시
+        const todayMenu = document.getElementById('todayMenuContent');
+        
+        if (index >= 0 && index < weekMenus.length) {
+            let menuContent = weekMenus[index];
+            
+            // 칼로리 정보 추가
+            if (weekCalories[index]) {
+                menuContent += `<br><div class="calorie-info">칼로리: ${weekCalories[index]}</div>`;
+            }
+            
+            // 알레르기 정보 추가
+            if (weekAllergies[index]) {
+                const allergies = weekAllergies[index].split(',').map(a => a.trim());
+                menuContent += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
+            }
+            
+            todayMenu.innerHTML = menuContent;
+        }
+    }
+}
+
+// 오늘 날짜 하이라이트
+function updateTodayHighlight() {
+    const dayIndex = today.getDay() - 1; // 0: 일요일, 1: 월요일, ...
+    if (dayIndex >= 0 && dayIndex < 5) {
+        const cells = document.querySelectorAll('#weeklyMenu th');
+        cells[dayIndex].style.backgroundColor = '#e3f2fd';
+    }
+}
+
 // 별점 시스템 설정
 function setupStarRating() {
     const stars = document.querySelectorAll('.star');
@@ -167,15 +291,6 @@ function updateStars(rating, className) {
             star.classList.add(className);
         }
     });
-}
-
-// 오늘 날짜 하이라이트
-function updateTodayHighlight() {
-    const dayIndex = today.getDay() - 1; // 0: 일요일, 1: 월요일, ...
-    if (dayIndex >= 0 && dayIndex < 5) {
-        const cells = document.querySelectorAll('#weeklyMenu th');
-        cells[dayIndex].style.backgroundColor = '#e3f2fd';
-    }
 }
 
 // 피드백 제출
@@ -286,121 +401,6 @@ async function loadFeedbacks() {
         updateFeedbackDisplay();
     } catch (error) {
         console.error('Error loading feedbacks:', error);
-    }
-}
-
-// 포인트 충전
-function chargePoints() {
-    // 실제 구현에서는 결제 시스템으로 연결
-    alert('결제 시스템으로 연결됩니다.');
-}
-
-// 모바일 네비게이션 설정
-function setupMobileNavigation() {
-    const prevBtn = document.getElementById('prevDayBtn');
-    const nextBtn = document.getElementById('nextDayBtn');
-    const currentDayEl = document.querySelector('.current-day');
-    
-    // 현재 선택된 요일 인덱스 (기본값: 오늘)
-    let currentDayIndex = today.getDay() - 1; // 0: 월요일, 1: 화요일, ...
-    if (currentDayIndex < 0 || currentDayIndex > 4) {
-        currentDayIndex = 0; // 주말이면 월요일로 설정
-    }
-    
-    // 초기 요일 표시
-    updateCurrentDay(currentDayIndex);
-    
-    // 이전 요일 버튼 클릭 이벤트
-    prevBtn.addEventListener('click', function() {
-        currentDayIndex = (currentDayIndex - 1 + 5) % 5; // 0~4 범위 유지
-        updateCurrentDay(currentDayIndex);
-    });
-    
-    // 다음 요일 버튼 클릭 이벤트
-    nextBtn.addEventListener('click', function() {
-        currentDayIndex = (currentDayIndex + 1) % 5; // 0~4 범위 유지
-        updateCurrentDay(currentDayIndex);
-    });
-    
-    // 현재 요일 업데이트
-    function updateCurrentDay(index) {
-        const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
-        currentDayEl.textContent = days[index];
-        
-        // 메뉴 표시
-        const todayMenu = document.getElementById('todayMenuContent');
-        const weekMenus = getWeekMenus();
-        
-        if (index >= 0 && index < weekMenus.length) {
-            todayMenu.innerHTML = weekMenus[index];
-        }
-    }
-}
-
-// 주간 메뉴 데이터 가져오기
-function getWeekMenus() {
-    const menuTable = document.getElementById('menuTableBody');
-    const cells = menuTable.querySelectorAll('td');
-    const weekMenus = [];
-    
-    cells.forEach(cell => {
-        weekMenus.push(cell.innerHTML);
-    });
-    
-    return weekMenus;
-}
-
-// 모바일 네비게이션 초기화
-function initMobileNavigation(weekMenus, weekCalories, weekAllergies) {
-    const prevBtn = document.getElementById('prevDayBtn');
-    const nextBtn = document.getElementById('nextDayBtn');
-    const currentDayEl = document.querySelector('.current-day');
-    
-    // 현재 선택된 요일 인덱스 (기본값: 오늘)
-    let currentDayIndex = today.getDay() - 1; // 0: 월요일, 1: 화요일, ...
-    if (currentDayIndex < 0 || currentDayIndex > 4) {
-        currentDayIndex = 0; // 주말이면 월요일로 설정
-    }
-    
-    // 초기 요일 표시
-    updateCurrentDay(currentDayIndex);
-    
-    // 이전 요일 버튼 클릭 이벤트
-    prevBtn.addEventListener('click', function() {
-        currentDayIndex = (currentDayIndex - 1 + 5) % 5; // 0~4 범위 유지
-        updateCurrentDay(currentDayIndex);
-    });
-    
-    // 다음 요일 버튼 클릭 이벤트
-    nextBtn.addEventListener('click', function() {
-        currentDayIndex = (currentDayIndex + 1) % 5; // 0~4 범위 유지
-        updateCurrentDay(currentDayIndex);
-    });
-    
-    // 현재 요일 업데이트
-    function updateCurrentDay(index) {
-        const days = ['월요일', '화요일', '수요일', '목요일', '금요일'];
-        currentDayEl.textContent = days[index];
-        
-        // 메뉴 표시
-        const todayMenu = document.getElementById('todayMenuContent');
-        
-        if (index >= 0 && index < weekMenus.length) {
-            let menuContent = weekMenus[index];
-            
-            // 칼로리 정보 추가
-            if (weekCalories[index]) {
-                menuContent += `<br><div class="calorie-info">칼로리: ${weekCalories[index]}</div>`;
-            }
-            
-            // 알레르기 정보 추가
-            if (weekAllergies[index]) {
-                const allergies = weekAllergies[index].split(',').map(a => a.trim());
-                menuContent += `<div class="allergy-info">${formatAllergies(allergies)}</div>`;
-            }
-            
-            todayMenu.innerHTML = menuContent;
-        }
     }
 }
 
