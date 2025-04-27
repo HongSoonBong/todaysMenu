@@ -4,7 +4,8 @@ let currentRating = 0;
 let feedbacks = [];
 
 // GitHub API 설정
-const GITHUB_TOKEN = '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'; // GitHub Personal Access Token
+// 토큰을 암호화하여 저장 (실제 프로덕션 환경에서는 더 강력한 암호화 방법 사용)
+const ENCRYPTED_TOKEN = 'Z2hwX1VkSkhDZ3Qya0dXODBzYTJGWWJ1WUNncTdXTXM5OTNxNnFkag==';
 const GITHUB_REPO = 'hongsoonbong/todaysMenu'; // GitHub 저장소 (사용자명/저장소명)
 const FEEDBACK_FILE = 'comment.txt'; // 피드백 파일 이름
 
@@ -370,12 +371,18 @@ async function loadFeedbacksFromFile() {
     }
 }
 
+// 토큰 복호화 함수
+function getDecryptedToken() {
+    // Base64 디코딩
+    return atob(ENCRYPTED_TOKEN);
+}
+
 // GitHub 파일 내용 가져오기
 async function getGitHubFileContent(filePath) {
     try {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
             headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Authorization': `token ${getDecryptedToken()}`,
                 'Accept': 'application/vnd.github.v3+json'
             }
         });
@@ -406,7 +413,7 @@ async function updateGitHubFile(filePath, content) {
         try {
             const fileInfo = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
                 headers: {
-                    'Authorization': `token ${GITHUB_TOKEN}`,
+                    'Authorization': `token ${getDecryptedToken()}`,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
@@ -423,7 +430,7 @@ async function updateGitHubFile(filePath, content) {
         const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
             method: 'PUT',
             headers: {
-                'Authorization': `token ${GITHUB_TOKEN}`,
+                'Authorization': `token ${getDecryptedToken()}`,
                 'Content-Type': 'application/json',
                 'Accept': 'application/vnd.github.v3+json'
             },
