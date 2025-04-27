@@ -186,17 +186,17 @@ async function saveFeedbackToFile(newFeedback) {
         feedbacks.push(newFeedback);
         
         // 파일에 저장
-        const blob = new Blob([JSON.stringify(feedbacks, null, 2)], { type: 'application/json' });
-        const handle = await window.showSaveFilePicker({
-            suggestedName: 'comment.txt',
-            types: [{
-                description: 'Text Files',
-                accept: { 'text/plain': ['.txt'] },
-            }],
+        const response = await fetch('comment.txt', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(feedbacks, null, 2)
         });
-        const writable = await handle.createWritable();
-        await writable.write(blob);
-        await writable.close();
+        
+        if (!response.ok) {
+            throw new Error('피드백 저장에 실패했습니다.');
+        }
     } catch (error) {
         console.error('Error saving feedback:', error);
         throw error;
@@ -206,21 +206,16 @@ async function saveFeedbackToFile(newFeedback) {
 // 파일에서 피드백 불러오기
 async function loadFeedbacksFromFile() {
     try {
-        const [fileHandle] = await window.showOpenFilePicker({
-            types: [{
-                description: 'Text Files',
-                accept: { 'text/plain': ['.txt'] },
-            }],
-        });
-        const file = await fileHandle.getFile();
-        const contents = await file.text();
-        return JSON.parse(contents);
-    } catch (error) {
-        if (error.name === 'AbortError') {
-            // 사용자가 파일 선택을 취소한 경우
+        const response = await fetch('comment.txt');
+        if (!response.ok) {
+            // 파일이 없거나 읽을 수 없는 경우 빈 배열 반환
             return [];
         }
-        throw error;
+        const contents = await response.text();
+        return JSON.parse(contents);
+    } catch (error) {
+        console.error('Error loading feedbacks from file:', error);
+        return [];
     }
 }
 
