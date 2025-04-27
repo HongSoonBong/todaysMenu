@@ -431,7 +431,7 @@ async function updateGitHubFile(filePath, content) {
             method: 'PUT',
             headers: {
                 Authorization: `Bearer ${getDecryptedToken()}`,
-                Content-Type: 'application/json',
+                "Content-Type": 'application/json',
                 Accept: 'application/vnd.github.v3+json'
             },
             body: JSON.stringify({
